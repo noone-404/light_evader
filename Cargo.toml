@@ -1,7 +1,7 @@
 [package]
-name = "shade"
-version = "0.1.0"
-edition = "2021"
+name = "shade" # Will keep it like this for now
+version = "0.1.0" # Not sure if I should change it
+edition = "2021" 
 
 [dependencies]
-macroquad = "0.4.0"
+macroquad = "0.4.0" # Adding the macroquad library itself

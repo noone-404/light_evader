@@ -17,17 +17,18 @@ async fn main() { // Main function
     // Create the player through the struct we initialized above
     let mut player = Player { x: screen_width() / 2.0, y: screen_height() / 2.0, texture: load_texture("src/assets/shade.png").await.unwrap(), color: macroquad::color::WHITE , speed: 250.0 };
     
-    let score = get_time() as i64;
-
     // Main loop
     loop {
+
+        let score = get_time() as i64;
 
         clear_background(BLACK); // Set the backround color!!!
 
         let delta = get_frame_time(); // Get the frames so we will work with frames instead
 
         if is_key_pressed(KeyCode::Space) {
-            save_score::save_score().unwrap();
+            save_score::save_score(score).unwrap();
+            break;
         }
 
         if is_key_down(KeyCode::Escape) {
