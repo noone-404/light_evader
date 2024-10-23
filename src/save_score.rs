@@ -8,7 +8,7 @@ pub fn save_score(score: i64) -> std::io::Result<()> {
 
     let mut writer = BufWriter::new(file);
 
-    writer.write_all(format!("High_Score: {}".as_bytes(), score.to_string().as_bytes()))?;
+    writer.write_all(format!("High_Score: {}", score).to_string().as_bytes())?;
 
     writer.flush()?;
 
