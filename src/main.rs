@@ -27,7 +27,14 @@ struct Light {
 #[macroquad::main("Light Evader")] // Tell macroquad that this is the main function that we are going to use
 // Main function
 async fn main() {
-    window_conf().await;
+    Conf {
+        window_title: "Light Evader".to_owned(),
+        window_width: 800.to_owned(),
+        window_height: 600.to_owned(),
+        fullscreen: false.to_owned(),
+        window_resizable: false.to_owned(),
+        ..Default::default()
+    };
 
     let mut lights: Vec<Light> = Vec::new(); // Initialize the lights as a vector so it could contain muliple lights lights at once
 
@@ -44,6 +51,8 @@ async fn main() {
     let mut score = get_time() as i64;
 
     let mut spawn_timer = 0.0;
+
+    let mut  time_bettween_spawns = 1.0;
 
     // Main loop
     loop {
@@ -90,7 +99,7 @@ async fn main() {
 
             // Spawn a new light every second
             spawn_timer += get_frame_time();
-            if spawn_timer >= 1.0 {
+            if spawn_timer >= time_bettween_spawns {
                 let mut rng = thread_rng();
                 lights.push(Light {
                     x: rng.gen_range(0.0..screen_width()),
@@ -101,6 +110,11 @@ async fn main() {
                     timer: 5.0,
                 });
                 spawn_timer = 0.0;
+            }
+            if score > 14 {
+                time_bettween_spawns = 0.8;
+            } else if score > 22 {
+                time_bettween_spawns = 0.6;
             }
 
             // Update the lights
@@ -155,16 +169,5 @@ async fn main() {
         }
 
         next_frame().await // Call next frame
-    }
-}
-
-async fn window_conf() -> Conf {
-    Conf {
-        window_title: "Light Evader".to_owned(),
-        window_width: 800,
-        window_height: 600,
-        fullscreen: false,
-        window_resizable: false,
-        ..Default::default()
     }
 }

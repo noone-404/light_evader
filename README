@@ -1,12 +1,12 @@
-# The Game
+# THE GAME
 
 A game where you play as a shadow and try to avoid the lights while getting score as the time passes.
 If the light lays onto you then it's game over and you can save as a high score on the Data folder/directory
 
-# For the Quads Jam
+# FOR THE QUADS GAME JAM
 
 This Game is made for the Quads Jam 2024. More abut it over here: https://itch.io/jam/quads-jam-2024
 
-# Details
+# DETAILS
 
 This game is made in the rust programming language with the macroquad library
