@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::Read;
 
+#[path = "save_score.rs"]
 mod save_score;
 
 pub fn return_high_score() -> i64 {
@@ -30,7 +31,7 @@ pub fn new_high_score(score: i64) -> bool {
 
     if score > high_score {
         println!("New High Score: {}", score);
-        save_score::save_score(score).unwrap();
+        save_score::_save_score(score).unwrap();
 
         return true;
     } else {

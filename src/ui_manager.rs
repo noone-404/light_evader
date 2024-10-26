@@ -1,6 +1,6 @@
 // ui_manager.rs
 use macroquad::prelude::*;
-use macroquad::ui;
+//use macroquad::ui::{hash, widgets, root_ui};
 
 #[path = "read_score.rs"]
 pub mod read_score;
@@ -22,45 +22,74 @@ impl UIManager {
 
     pub fn draw(&mut self) {
         if self.game_over {
-            draw_text("Game Over", screen_width() / 2.1, 165.0, 20.0, WHITE);
-
-            // For some reason it doesn't work
-            if read_score::new_high_score(self.score as i64) == true {
-                draw_text(
-                    format!("New High Score: {}", self.score).as_str(),
-                    screen_width() / 2.1 - 8.0,
-                    190.0,
-                    20.0,
-                    WHITE,
-                );
-            } else if read_score::new_high_score(self.score as i64) == false {
-                draw_text(
-                    format!("Your score: {}", self.score).as_str(),
-                    screen_width() / 2.1 - 8.0,
-                    190.0,
-                    20.0,
-                    WHITE,
-                );
-                draw_text(
-                    format!("High Score: {}", self.high_score).as_str(),
-                    screen_width() / 2.1 - 1.0,
-                    200.0,
-                    14.0,
-                    WHITE,
-                );
+            let window_size = vec2(screen_width(), screen_height());
+            let center_x = window_size.x / 2.0;
+        
+            // Optional: Draw a semi-transparent overlay
+            let overlay_color = Color::from_rgba(0, 0, 0, 128); // Semi-transparent black
+            draw_rectangle(0.0, 0.0, window_size.x, window_size.y, overlay_color);
+        
+            // Draw the UI elements manually
+            let label_spacing = 40.0; // Space between labels and buttons
+            let base_y = 200.0;
+        
+            // Centering elements
+            let score_label = format!("Score: {}", self.score);
+            let high_score_label = format!("High Score: {}", self.high_score);
+        
+            let score_size = measure_text(&score_label, None, 20, 1.0);
+            let high_score_size = measure_text(&high_score_label, None, 20, 1.0);
+            let button_width = 100.0;
+            let button_height = 30.0;
+        
+            // Draw score and high score labels
+            draw_text(
+                &score_label,
+                center_x - score_size.width / 2.0,
+                base_y,
+                20.0,
+                WHITE,
+            );
+            draw_text(
+                &high_score_label,
+                center_x - high_score_size.width / 2.0,
+                base_y + label_spacing,
+                20.0,
+                WHITE,
+            );
+        
+            // Draw buttons
+            let quit_button_y = base_y + label_spacing * 2.0;
+            let play_again_button_y = base_y + label_spacing * 3.0;
+        
+            // Draw Quit button
+            draw_rectangle(center_x - button_width / 2.0, quit_button_y, button_width, button_height, WHITE);
+            let quit_text = "Quit";
+            let quit_text_size = measure_text(quit_text, None, 20, 1.0);
+            let quit_text_y = quit_button_y + (button_height / 2.0) - (quit_text_size.height / 2.0) + 10.0; // Adjusted for fine alignment
+            draw_text(quit_text, center_x - quit_text_size.width / 2.0, quit_text_y, 20.0, BLACK);
+        
+            // Draw Play Again button
+            draw_rectangle(center_x - button_width / 2.0, play_again_button_y, button_width, button_height, WHITE);
+            let play_again_text = "Play Again";
+            let play_again_text_size = measure_text(play_again_text, None, 20, 1.0);
+            let play_again_text_y = play_again_button_y + (button_height / 2.0) - (play_again_text_size.height / 2.0) + 10.0; // Adjusted for fine alignment
+            draw_text(play_again_text, center_x - play_again_text_size.width / 2.0, play_again_text_y, 20.0, BLACK);
+        
+            // Check for mouse clicks on buttons
+            if is_mouse_button_pressed(MouseButton::Left) {
+                let mouse_pos = mouse_position();
+        
+                if mouse_pos.0 >= center_x - button_width / 2.0 && mouse_pos.0 <= center_x + button_width / 2.0 {
+                    if mouse_pos.1 >= quit_button_y && mouse_pos.1 < quit_button_y + button_height {
+                        std::process::exit(0);
+                    }
+                    if mouse_pos.1 >= play_again_button_y && mouse_pos.1 < play_again_button_y + button_height {
+                        self.game_over = false;
+                    }
+                }
             }
-
-            if ui::root_ui().button(Vec2::new(screen_width() / 2.1 + 15.0, 250.0), "Retry") {
-                // Retry logic here
-                self.game_over = false;
-                self.score = 0;
-            }
-
-            if ui::root_ui().button(Vec2::new(screen_width() / 2.1 + 20.0, 300.0), "Exit") {
-                // Exit logic here
-                std::process::exit(0);
-            }
-        }
+        }                          
     }
 
     pub fn update(&mut self, score: u32) {

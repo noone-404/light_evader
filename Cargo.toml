@@ -1,5 +1,5 @@
 [package]
-name = "shade" # Will keep it like this for now
+name = "light_evader" # Will keep it like this for now
 version = "0.1.0" # Not sure if I should change it
 edition = "2021" 
 

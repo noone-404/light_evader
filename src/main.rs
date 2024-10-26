@@ -3,6 +3,7 @@ use macroquad::prelude::*; // Import everything from the library we want to use 
 
 mod save_score; // Tell that we want to use the save_score.rs file
 pub mod ui_manager;
+mod read_score;
 
 // Struct For the player so it will all be in one place
 struct Player {
@@ -12,6 +13,17 @@ struct Player {
     player_is_alive: bool, // Determine if player is alive or not
     color: Color,          // The color is not important but we have it anyway
     speed: f32,
+}
+
+fn conf() -> Conf {
+    Conf {
+        window_title: "Light Evader".to_owned(),
+        window_width: 800.to_owned(),
+        window_height: 600.to_owned(),
+        fullscreen: false.to_owned(),
+        window_resizable: false.to_owned(),
+        ..Default::default()
+    }
 }
 
 // Get all of the light stuff in one place with a sctruct
@@ -24,17 +36,9 @@ struct Light {
     timer: f32,
 }
 
-#[macroquad::main("Light Evader")] // Tell macroquad that this is the main function that we are going to use
+#[macroquad::main(conf)] // Tell macroquad that this is the main function that we are going to use and also pass out the config to know how it would be like
 // Main function
 async fn main() {
-    Conf {
-        window_title: "Light Evader".to_owned(),
-        window_width: 800.to_owned(),
-        window_height: 600.to_owned(),
-        fullscreen: false.to_owned(),
-        window_resizable: false.to_owned(),
-        ..Default::default()
-    };
 
     let mut lights: Vec<Light> = Vec::new(); // Initialize the lights as a vector so it could contain muliple lights lights at once
 
@@ -54,8 +58,10 @@ async fn main() {
 
     let mut time_bettween_spawns = 1.0;
 
+    let mut running: bool = true;
+
     // Main loop
-    loop {
+    while running {
         clear_background(BLACK); // Set the backround color!!!
 
         let delta = get_frame_time(); // Get the frames so we will work with frames instead
@@ -63,15 +69,10 @@ async fn main() {
         if player.player_is_alive {
             score = get_time() as i64;
 
-            if is_key_pressed(KeyCode::Space) {
-                // For now we will have the space bar to save the score
-                save_score::save_score(score).unwrap();
-            }
-
             // Break it down if hit escape
             if is_key_down(KeyCode::Escape) {
-                println!("Closing Game\n");
-                break;
+                crate::read_score::new_high_score(score);
+                running = false;
             }
 
             // Movement of player
