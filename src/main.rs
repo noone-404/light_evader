@@ -58,8 +58,6 @@ async fn main() {
     loop {
         clear_background(BLACK); // Set the backround color!!!
 
-        draw_text(&format!("Score: {}", score), 10.0, 20.0, 30.0, WHITE); // Draw the score on the screen on a comfortable place
-
         let delta = get_frame_time(); // Get the frames so we will work with frames instead
 
         if player.player_is_alive {
@@ -157,6 +155,8 @@ async fn main() {
         player.y = clamp(player.y, 0.0, screen_height() - player.texture.height());
 
         draw_texture(&player.texture, player.x, player.y, player.color); // Draw the player
+
+        draw_text(&format!("Score: {}", score), 10.0, 20.0, 30.0, WHITE); // Draw the score on the screen on a comfortable place
 
         draw_text( &format!("FPS: {}", get_fps().to_string()), 10.0, 40.0, 20.0, WHITE, ); // Show the fps on screen
 

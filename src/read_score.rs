@@ -10,7 +10,10 @@ pub fn return_high_score() -> i64 {
         
     // Read the file
     let mut contents = String::new();
+
     file.read_to_string(&mut contents).unwrap();
+
+    drop(file);
 
     // Store where the data is
     let data = contents.trim();
@@ -22,13 +25,15 @@ pub fn return_high_score() -> i64 {
     return high_score;
 }
 
-pub fn compare_high_score(score: i64) {
+pub fn new_high_score(score: i64) -> bool {
     let high_score = return_high_score();
 
     if score > high_score {
         println!("New High Score: {}", score);
         save_score::save_score(score).unwrap();
+
+        return true;
     } else {
-        return;
+        return false;
     }
 }
