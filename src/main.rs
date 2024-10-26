@@ -1,5 +1,5 @@
-use macroquad::prelude::*; // Import everything from the library we want to use
-use ::rand::{thread_rng, Rng};  // Import random number generator
+use ::rand::{thread_rng, Rng};
+use macroquad::prelude::*; // Import everything from the library we want to use // Import random number generator
 
 mod save_score; // Tell that we want to use the save_score.rs file
 pub mod ui_manager;
@@ -8,9 +8,9 @@ pub mod ui_manager;
 struct Player {
     x: f32,
     y: f32,
-    texture: Texture2D,               // The image
-    player_is_alive: bool,            // Determine if player is alive or not
-    color: Color, // The color is not important but we have it anyway
+    texture: Texture2D,    // The image
+    player_is_alive: bool, // Determine if player is alive or not
+    color: Color,          // The color is not important but we have it anyway
     speed: f32,
 }
 
@@ -52,7 +52,7 @@ async fn main() {
 
     let mut spawn_timer = 0.0;
 
-    let mut  time_bettween_spawns = 1.0;
+    let mut time_bettween_spawns = 1.0;
 
     // Main loop
     loop {
@@ -149,7 +149,7 @@ async fn main() {
                 ui.draw();
             }
         }
-    
+
         // Make sure the player doesn't go out of the screen by saying to minimize the x and y with the screen width and height minus the texture so we won't have accurences were the texture goes off screen
         player.x = clamp(player.x, 0.0, screen_width() - player.texture.width());
         player.y = clamp(player.y, 0.0, screen_height() - player.texture.height());
@@ -158,7 +158,13 @@ async fn main() {
 
         draw_text(&format!("Score: {}", score), 10.0, 20.0, 30.0, WHITE); // Draw the score on the screen on a comfortable place
 
-        draw_text( &format!("FPS: {}", get_fps().to_string()), 10.0, 40.0, 20.0, WHITE, ); // Show the fps on screen
+        draw_text(
+            &format!("FPS: {}", get_fps().to_string()),
+            10.0,
+            40.0,
+            20.0,
+            WHITE,
+        ); // Show the fps on screen
 
         // We make the light increase it's radious overtime so he player will have time to see it and also here is where the max_radious variable is useful
         for light in &mut lights {

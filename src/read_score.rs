@@ -7,7 +7,7 @@ pub fn return_high_score() -> i64 {
     let path = "Data/high_score/high_score.scs";
 
     let mut file = File::open(path).unwrap();
-        
+
     // Read the file
     let mut contents = String::new();
 

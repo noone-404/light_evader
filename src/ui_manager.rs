@@ -23,13 +23,31 @@ impl UIManager {
     pub fn draw(&mut self) {
         if self.game_over {
             draw_text("Game Over", screen_width() / 2.1, 165.0, 20.0, WHITE);
-            
+
             // For some reason it doesn't work
             if read_score::new_high_score(self.score as i64) == true {
-                draw_text(format!("New High Score: {}", self.score).as_str(), screen_width() / 2.1 - 8.0, 190.0, 20.0, WHITE);
+                draw_text(
+                    format!("New High Score: {}", self.score).as_str(),
+                    screen_width() / 2.1 - 8.0,
+                    190.0,
+                    20.0,
+                    WHITE,
+                );
             } else if read_score::new_high_score(self.score as i64) == false {
-                draw_text(format!("Your score: {}", self.score).as_str(), screen_width() / 2.1 - 8.0, 190.0, 20.0, WHITE);
-                draw_text(format!("High Score: {}", self.high_score).as_str(), screen_width() / 2.1 -1.0, 200.0, 14.0, WHITE);
+                draw_text(
+                    format!("Your score: {}", self.score).as_str(),
+                    screen_width() / 2.1 - 8.0,
+                    190.0,
+                    20.0,
+                    WHITE,
+                );
+                draw_text(
+                    format!("High Score: {}", self.high_score).as_str(),
+                    screen_width() / 2.1 - 1.0,
+                    200.0,
+                    14.0,
+                    WHITE,
+                );
             }
 
             if ui::root_ui().button(Vec2::new(screen_width() / 2.1 + 15.0, 250.0), "Retry") {
