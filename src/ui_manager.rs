@@ -9,7 +9,7 @@ pub mod read_score;
 
 pub struct UIManager {
     pub game_over: bool,
-    pub score: u32,
+    pub score: i64,
     pub high_score: i64,
 }
 
@@ -22,7 +22,7 @@ impl UIManager {
         }
     }
 
-    pub async  fn draw(&mut self, player: &mut Player, score: u32, time_bettween_spawns: f64, spawn_timer: f64, lights: &mut Vec<Light>) {
+    pub async  fn draw(&mut self, player: &mut Player, score: i64, time_bettween_spawns: f64, spawn_timer: f64, lights: &mut Vec<Light>) {
         if self.game_over {
             let window_size = vec2(screen_width(), screen_height());
             let center_x = window_size.x / 2.0;
@@ -78,6 +78,9 @@ impl UIManager {
             let play_again_text_y = play_again_button_y + (button_height / 2.0) - (play_again_text_size.height / 2.0) + 10.0; // Adjusted for fine alignment
             draw_text(play_again_text, center_x - play_again_text_size.width / 2.0, play_again_text_y, 20.0, BLACK);
         
+            // Save the score if it's a high score
+            read_score::new_high_score(score as i64);
+
             // Check for mouse clicks on buttons
             if is_mouse_button_pressed(MouseButton::Left) {
                 let mouse_pos = mouse_position();
@@ -87,6 +90,8 @@ impl UIManager {
                         std::process::exit(0);
                     }
                     if mouse_pos.1 >= play_again_button_y && mouse_pos.1 < play_again_button_y + button_height {
+                        self.score = 0;
+                        self.zero_score(score);
                         self.reset_game( player, score, time_bettween_spawns, spawn_timer, lights).await;
                     }
                 }
@@ -94,17 +99,17 @@ impl UIManager {
         }
     }
 
-    pub fn update(&mut self, score: u32) {
+    pub fn update(&mut self, score: i64) {
         self.score = score;
         self.game_over = true;
         self.high_score = read_score::return_high_score();
     }
 
-    async fn reset_game(&mut self, player: &mut Player, mut _score: u32, mut _time_bettween_spawns: f64, mut _spawn_timer: f64, lights: &mut Vec<Light>) {
+    async fn reset_game(&mut self, player: &mut Player, mut  _score: i64, mut _time_bettween_spawns: f64, mut _spawn_timer: f64, lights: &mut Vec<Light>) {
         self.game_over = false;
         self.score = 0;
 
-        _score = 0;
+        _score = self.zero_score(_score);
         _time_bettween_spawns = 1.0;
         _spawn_timer = 0.0;
 
@@ -114,5 +119,11 @@ impl UIManager {
         player.player_is_alive = true;
 
         lights.clear();
+    }
+
+    fn zero_score(&mut self, mut _score: i64) -> i64 {
+        self.score = 0;
+        _score = 0;
+        return _score;
     }
 }

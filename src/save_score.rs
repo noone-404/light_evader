@@ -2,7 +2,7 @@ use std::fs::File; // Make sure to tell the system we want to search through the
 use std::io::{BufWriter, Write}; // We gain the ability to write on files
 
 pub fn _save_score(score: i64) -> std::io::Result<()> {
-    let file = File::create("Data/high_score/high_score.scs")?; // We create the high score file on the Data folder and also scs because score script
+    let file = File::create("Data/high_score.scs")?; // We create the high score file on the Data folder and also scs because score script
 
     let mut writer = BufWriter::new(file); // We create the writer for the file
 

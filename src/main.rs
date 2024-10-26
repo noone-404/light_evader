@@ -54,7 +54,9 @@ async fn main() {
 
     let mut ui_manager = ui_manager::UIManager::new();
 
-    let mut score = get_time() as i64;
+    let mut score_timer = 0.0;
+
+    let mut score = 0;
 
     let mut spawn_timer = 0.0;
 
@@ -69,7 +71,11 @@ async fn main() {
         let delta = get_frame_time(); // Get the frames so we will work with frames instead
 
         if player.player_is_alive {
-            score = get_time() as i64;
+            score_timer += get_frame_time();
+            if score_timer >= 1.0 {
+                score += 1;
+                score_timer = 0.0;
+            }
 
             // Break it down if hit escape
             if is_key_down(KeyCode::Escape) {
@@ -134,9 +140,9 @@ async fn main() {
                 draw_circle(light.x, light.y, light.radious, light.color);
             }
         } else {
-            ui_manager.update(score as u32);
+            ui_manager.update(score);
 
-            ui_manager.draw(&mut player, score as u32, time_bettween_spawns as f64, spawn_timer as f64, &mut lights).await;
+            ui_manager.draw(&mut player, score, time_bettween_spawns as f64, spawn_timer as f64, &mut lights).await;
         }
 
         // Check for collision with the player
@@ -155,18 +161,6 @@ async fn main() {
         player.x = clamp(player.x, 0.0, screen_width() - player.texture.width());
         player.y = clamp(player.y, 0.0, screen_height() - player.texture.height());
 
-        draw_texture(&player.texture, player.x, player.y, player.color); // Draw the player
-
-        draw_text(&format!("Score: {}", score), 10.0, 20.0, 30.0, WHITE); // Draw the score on the screen on a comfortable place
-
-        draw_text(
-            &format!("FPS: {}", get_fps().to_string()),
-            10.0,
-            40.0,
-            20.0,
-            WHITE,
-        ); // Show the fps on screen
-
         // We make the light increase it's radious overtime so he player will have time to see it and also here is where the max_radious variable is useful
         for light in &mut lights {
             light.radious += 0.5;
@@ -174,6 +168,12 @@ async fn main() {
                 light.radious = light.max_radious;
             }
         }
+        
+        draw_texture(&player.texture, player.x, player.y, player.color); // Draw the player
+
+        draw_text(&format!("Score: {}", score), 10.0, 20.0, 30.0, WHITE); // Draw the score on the screen on a comfortable place
+
+        draw_text( &format!("FPS: {}", get_fps().to_string()), 10.0, 40.0, 20.0, WHITE, ); // Show the fps on screen
 
         next_frame().await // Call next frame
     }

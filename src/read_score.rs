@@ -5,7 +5,7 @@ use std::io::Read;
 mod save_score;
 
 pub fn return_high_score() -> i64 {
-    let path = "Data/high_score/high_score.scs";
+    let path = "Data/high_score.scs";
 
     let mut file = File::open(path).unwrap();
 
