@@ -5,16 +5,6 @@ mod save_score; // Tell that we want to use the save_score.rs file
 pub mod ui_manager;
 mod read_score;
 
-// Struct For the player so it will all be in one place
-struct Player {
-    x: f32,
-    y: f32,
-    texture: Texture2D,    // The image
-    player_is_alive: bool, // Determine if player is alive or not
-    color: Color,          // The color is not important but we have it anyway
-    speed: f32,
-}
-
 fn conf() -> Conf {
     Conf {
         window_title: "Light Evader".to_owned(),
@@ -26,8 +16,18 @@ fn conf() -> Conf {
     }
 }
 
+// Struct For the player so it will all be in one place
+pub struct Player {
+    x: f32,
+    y: f32,
+    texture: Texture2D,    // The image
+    player_is_alive: bool, // Determine if player is alive or not
+    color: Color,          // The color is not important but we have it anyway
+    speed: f32,
+}
+
 // Get all of the light stuff in one place with a sctruct
-struct Light {
+pub struct Light {
     x: f32,
     y: f32,
     radious: f32,
@@ -51,6 +51,8 @@ async fn main() {
         color: macroquad::color::WHITE,
         speed: 250.0,
     };
+
+    let mut ui_manager = ui_manager::UIManager::new();
 
     let mut score = get_time() as i64;
 
@@ -131,6 +133,10 @@ async fn main() {
             for light in &lights {
                 draw_circle(light.x, light.y, light.radious, light.color);
             }
+        } else {
+            ui_manager.update(score as u32);
+
+            ui_manager.draw(&mut player, score as u32, time_bettween_spawns as f64, spawn_timer as f64, &mut lights).await;
         }
 
         // Check for collision with the player
@@ -142,12 +148,6 @@ async fn main() {
             if distance < (player.texture.width() / 2.0 + light.radious) {
                 player.texture = load_texture("src/assets/shade_light_up.png").await.unwrap();
                 player.player_is_alive = false;
-
-                let mut ui = ui_manager::UIManager::new();
-
-                ui.update(score as u32);
-
-                ui.draw();
             }
         }
 

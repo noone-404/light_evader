@@ -1,5 +1,7 @@
 // ui_manager.rs
 use macroquad::prelude::*;
+
+use crate::{Light, Player};
 //use macroquad::ui::{hash, widgets, root_ui};
 
 #[path = "read_score.rs"]
@@ -20,7 +22,7 @@ impl UIManager {
         }
     }
 
-    pub fn draw(&mut self) {
+    pub async  fn draw(&mut self, player: &mut Player, score: u32, time_bettween_spawns: f64, spawn_timer: f64, lights: &mut Vec<Light>) {
         if self.game_over {
             let window_size = vec2(screen_width(), screen_height());
             let center_x = window_size.x / 2.0;
@@ -85,16 +87,32 @@ impl UIManager {
                         std::process::exit(0);
                     }
                     if mouse_pos.1 >= play_again_button_y && mouse_pos.1 < play_again_button_y + button_height {
-                        self.game_over = false;
+                        self.reset_game( player, score, time_bettween_spawns, spawn_timer, lights).await;
                     }
                 }
             }
-        }                          
+        }
     }
 
     pub fn update(&mut self, score: u32) {
         self.score = score;
         self.game_over = true;
         self.high_score = read_score::return_high_score();
+    }
+
+    async fn reset_game(&mut self, player: &mut Player, mut _score: u32, mut _time_bettween_spawns: f64, mut _spawn_timer: f64, lights: &mut Vec<Light>) {
+        self.game_over = false;
+        self.score = 0;
+
+        _score = 0;
+        _time_bettween_spawns = 1.0;
+        _spawn_timer = 0.0;
+
+        player.x = screen_width() / 2.0;
+        player.y = screen_height() / 2.0;
+        player.texture = load_texture("src/assets/shade.png").await.unwrap();
+        player.player_is_alive = true;
+
+        lights.clear();
     }
 }
