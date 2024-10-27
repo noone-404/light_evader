@@ -142,7 +142,7 @@ async fn main() {
         } else {
             ui_manager.update(score);
 
-            ui_manager.draw(&mut player, score, time_bettween_spawns as f64, spawn_timer as f64, &mut lights).await;
+            ui_manager.draw(&mut player, &mut score, time_bettween_spawns as f64, spawn_timer as f64, &mut lights).await;
         }
 
         // Check for collision with the player
