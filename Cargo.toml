@@ -6,3 +6,7 @@ edition = "2021"
 [dependencies]
 macroquad = "0.4.0" # Adding the macroquad library itself
 rand = "0.8.5" # Random number generator
+
+[dependencies.getrandom] # So it would be compatable on the web which I am not sure if I will add
+version = "0.2"
+features = ["js"]

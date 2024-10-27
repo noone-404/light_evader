@@ -46,7 +46,7 @@ async fn main() {
     let mut player = Player {
         x: screen_width() / 2.0,
         y: screen_height() / 2.0,
-        texture: load_texture("src/assets/shade.png").await.unwrap(),
+        texture: load_texture("Assets/shade.png").await.unwrap(),
         player_is_alive: true,
         color: macroquad::color::WHITE,
         speed: 250.0,
@@ -152,7 +152,7 @@ async fn main() {
                 + (player.y + player.texture.height() / 2.0 - light.y).powi(2))
             .sqrt();
             if distance < (player.texture.width() / 2.0 + light.radious) {
-                player.texture = load_texture("src/assets/shade_light_up.png").await.unwrap();
+                player.texture = load_texture("Assets/shade_light_up.png").await.unwrap();
                 player.player_is_alive = false;
             }
         }

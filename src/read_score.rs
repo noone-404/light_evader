@@ -30,7 +30,6 @@ pub fn new_high_score(score: i64) -> bool {
     let high_score = return_high_score();
 
     if score > high_score {
-        println!("New High Score: {}", score);
         save_score::_save_score(score).unwrap();
 
         return true;

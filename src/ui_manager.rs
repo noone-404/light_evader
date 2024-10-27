@@ -112,7 +112,7 @@ impl UIManager {
     
         player.x = screen_width() / 2.0;
         player.y = screen_height() / 2.0;
-        player.texture = load_texture("src/assets/shade.png").await.unwrap();
+        player.texture = load_texture("Assets/shade.png").await.unwrap();
         player.player_is_alive = true;
     
         lights.clear();
